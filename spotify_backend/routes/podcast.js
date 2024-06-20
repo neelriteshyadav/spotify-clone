@@ -19,7 +19,7 @@ router.post("/create", passport.authenticate("jwt",{session: false}), async (req
 //Get all podcasts published by me
 router.get("/get/mypodcasts", passport.authenticate("jwt",{session: false}), async (req, res) => {
     try {
-        const podcasts = await Podcast.find({ artist: req.user._id });
+        const podcasts = await Podcast.find({ artist: req.user._id }).populate("artist");
         return res.json({ data: podcasts });
     } catch (error) {
         return res.status(500).json({ error: "Internal server error" }); // Handle internal server error
