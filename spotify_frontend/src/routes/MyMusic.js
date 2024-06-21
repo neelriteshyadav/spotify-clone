@@ -8,7 +8,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SingleSongCard from '../components/shared/SingleSongCard';
 import { authGETReq } from '../utils/serverHelpers';
-import {Howl, Howler} from "howler";
+import { Howl, Howler } from 'howler';
 
 const MyMusic = () => {
 	const navigate = useNavigate();
@@ -16,7 +16,7 @@ const MyMusic = () => {
 	const [soundPlayed, setSoundPlayed] = useState(null);
 
 	const playSound = (songSrc) => {
-		if(soundPlayed) {
+		if (soundPlayed) {
 			soundPlayed.stop();
 		}
 		let sound = new Howl({
@@ -25,7 +25,7 @@ const MyMusic = () => {
 		});
 		setSoundPlayed(sound);
 		sound.play();
-	}
+	};
 
 	useEffect(() => {
 		const getData = async () => {
@@ -106,7 +106,12 @@ const MyMusic = () => {
 					</div>
 					<div className='space-y-3 overflow-auto'>
 						{songData.map((item) => {
-							return <SingleSongCard info={item} playSound={playSound}/>;
+							return (
+								<SingleSongCard
+									info={item}
+									playSound={playSound}
+								/>
+							);
 						})}
 					</div>
 				</div>
