@@ -4,13 +4,23 @@ import IconText from '../components/shared/IconText';
 import TextWidthHover from '../components/shared/TextWidthHover';
 import spotify_logo from '../assests/imgs/spotify_logo_white.svg';
 import { Icon } from '@iconify/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Howl, Howler } from 'howler';
-
+import songContext from '../contexts/songContext';
+import { useContext } from 'react';
 const LoggedInContainer = ({ children }) => {
 	const [soundPlayed, setSoundPlayed] = useState(null);
 	const [isPaused, setIsPaused] = useState(true);
-	const playSound = (songSrc) => {
+	const { currentSong, setCurrentSong } = useContext(songContext);
+
+	useEffect(() => {
+		if (!currentSong) {
+			return;
+		}
+		changeSong(currentSong.track);
+	}, [currentSong]);
+
+	const changeSong = (songSrc) => {
 		if (soundPlayed) {
 			soundPlayed.stop();
 		}
@@ -20,6 +30,14 @@ const LoggedInContainer = ({ children }) => {
 		});
 		setSoundPlayed(sound);
 		sound.play();
+		setIsPaused(false);
+	};
+
+	const playSound = () => {
+		if (!soundPlayed) {
+			return;
+		}
+		soundPlayed.play();
 	};
 
 	const pauseSound = () => {
@@ -28,9 +46,7 @@ const LoggedInContainer = ({ children }) => {
 
 	const togglePlayPause = () => {
 		if (isPaused) {
-			playSound(
-				'https://res.cloudinary.com/drz1os38q/video/upload/v1718916099/a1jfjfg1geactuybvigf.mp4',
-			);
+			playSound();
 			setIsPaused(false);
 		} else {
 			pauseSound();
@@ -40,7 +56,7 @@ const LoggedInContainer = ({ children }) => {
 
 	return (
 		<div className='h-full w-full bg-app-black'>
-			<div className='h-9/10 w-full flex'>
+			<div className={`${currentSong ? 'h-9/10' : 'h-full'} w-full flex`}>
 				<div className='h-full w-1/5 bg-black flex flex-col justify-between pb-10'>
 					<div>
 						<div className='p-5'>
@@ -54,6 +70,7 @@ const LoggedInContainer = ({ children }) => {
 								iconName={'material-symbols:home'}
 								displayText={'Home'}
 								active
+								targetLink={'/home'}
 							/>
 							<IconText
 								iconName={'material-symbols:search'}
@@ -66,6 +83,7 @@ const LoggedInContainer = ({ children }) => {
 							<IconText
 								iconName={'mingcute:music-fill'}
 								displayText={'My Podcasts'}
+								targetLink={'/mymusic'}
 							/>
 						</div>
 						<div className='pt-5'>
@@ -107,56 +125,61 @@ const LoggedInContainer = ({ children }) => {
 					<div className='content p-8 overflow-auto pt-0'>{children}</div>
 				</div>
 			</div>
-			<div className='px-4 h-1/10 w-full flex items-center bg-black bg-opacity-30 text-white'>
-				<div className='w-1/4 h-full flex items-center'>
-					<img
-						src='https://images.unsplash.com/photo-1718762538704-9698cd001106?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-						alt='currentSong'
-						className='h-14 w-14 rounded'
-					/>
-					<div className='pl-4'>
-						<div className='text-sm hover:underline cursor-pointer'>
-							Curtains
-						</div>
-						<div className='text-xs text-gray-500 hover:underline cursor-pointer'>
-							Ed Sheeren
+			{currentSong && (
+				<div className='px-4 h-1/10 w-full flex items-center bg-black bg-opacity-30 text-white'>
+					<div className='w-1/4 h-full flex items-center'>
+						<img
+							src={currentSong.thumbnail}
+							alt='currentSong'
+							className='h-14 w-14 rounded'
+						/>
+						<div className='pl-4'>
+							<div className='text-sm hover:underline cursor-pointer'>
+								{currentSong.name}
+							</div>
+							<div className='text-xs text-gray-500 hover:underline cursor-pointer'>
+								{currentSong.artist.firstName +
+									' ' +
+									currentSong.artist.lastName}
+							</div>
 						</div>
 					</div>
-				</div>
-				<div className='w-1/2 h-full flex justify-center flex-col items-center'>
-					<div className='flex items-center justify-between w-1/3'>
-						<Icon
-							icon='ph:shuffle-bold'
-							fontSize={30}
-							className='cursor-pointer text-gray-500 hover:text-white'
-						/>
-						<Icon
-							icon='mdi:skip-previous-outline'
-							fontSize={30}
-							className='cursor-pointer text-gray-500 hover:text-white'
-						/>
-						<Icon
-							icon={isPaused ? 'icon-park-solid:play' : 'zondicons:pause-solid'}
-							fontSize={50}
-							className='cursor-pointer text-gray-500 hover:text-white'
-							onClick={togglePlayPause}
-						/>
-						<Icon
-							icon='mdi:skip-next-outline'
-							fontSize={30}
-							className='cursor-pointer text-gray-500 hover:text-white'
-						/>
-						<Icon
-							icon='material-symbols:repeat'
-							fontSize={30}
-							className='cursor-pointer text-gray-500 hover:text-white'
-						/>
+					<div className='w-1/2 h-full flex justify-center flex-col items-center'>
+						<div className='flex items-center justify-between w-1/3'>
+							<Icon
+								icon='ph:shuffle-bold'
+								fontSize={30}
+								className='cursor-pointer text-gray-500 hover:text-white'
+							/>
+							<Icon
+								icon='mdi:skip-previous-outline'
+								fontSize={30}
+								className='cursor-pointer text-gray-500 hover:text-white'
+							/>
+							<Icon
+								icon={
+									isPaused ? 'icon-park-solid:play' : 'zondicons:pause-solid'
+								}
+								fontSize={50}
+								className='cursor-pointer text-gray-500 hover:text-white'
+								onClick={togglePlayPause}
+							/>
+							<Icon
+								icon='mdi:skip-next-outline'
+								fontSize={30}
+								className='cursor-pointer text-gray-500 hover:text-white'
+							/>
+							<Icon
+								icon='material-symbols:repeat'
+								fontSize={30}
+								className='cursor-pointer text-gray-500 hover:text-white'
+							/>
+						</div>
 					</div>
-					<div></div>
-				</div>
 
-				<div className='w-1/4 h-full flex justify-end'></div>
-			</div>
+					<div className='w-1/4 h-full flex justify-end'></div>
+				</div>
+			)}
 		</div>
 	);
 };
