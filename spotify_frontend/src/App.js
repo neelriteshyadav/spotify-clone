@@ -9,6 +9,7 @@ import HomeComponent from './routes/Home';
 import LoggedInHomeComponent from './routes/LoggedInHome';
 import UploadSong from './routes/UploadSong';
 import MyMusic from './routes/MyMusic';
+import Search from './routes/Search';
 import { useCookies } from 'react-cookie';
 import songContext from './contexts/songContext';
 
@@ -47,6 +48,10 @@ function App() {
 							<Route
 								path='/myMusic'
 								element={<MyMusic />}
+							/>
+							<Route
+								path='/search'
+								element={<Search />}
 							/>
 							<Route
 								path='*'
