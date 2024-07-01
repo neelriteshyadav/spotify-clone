@@ -72,7 +72,7 @@ const spotifyPlaylistsCardData = [
 
 const HomeComponent = () => {
 	return (
-		<LoggedInContainer>
+		<LoggedInContainer curActiveScreen='home'>
 			<PlaylistView
 				titleText='Focus'
 				cardsData={focusCardsData}

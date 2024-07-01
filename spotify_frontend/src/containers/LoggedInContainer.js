@@ -4,21 +4,32 @@ import IconText from '../components/shared/IconText';
 import TextWidthHover from '../components/shared/TextWidthHover';
 import spotify_logo from '../assests/imgs/spotify_logo_white.svg';
 import { Icon } from '@iconify/react';
-import { useEffect, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { Howl, Howler } from 'howler';
 import songContext from '../contexts/songContext';
 import { useContext } from 'react';
-const LoggedInContainer = ({ children }) => {
-	const [soundPlayed, setSoundPlayed] = useState(null);
-	const [isPaused, setIsPaused] = useState(true);
-	const { currentSong, setCurrentSong } = useContext(songContext);
+const LoggedInContainer = ({ children, curActiveScreen }) => {
+	const {
+		currentSong,
+		setCurrentSong,
+		soundPlayed,
+		setSoundPlayed,
+		isPaused,
+		setIsPaused,
+	} = useContext(songContext);
+	const firstUpdate = useRef(true);
 
-	useEffect(() => {
+	useLayoutEffect(() => {
+		if (firstUpdate.current) {
+			firstUpdate.current = false;
+			return;
+		}
+
 		if (!currentSong) {
 			return;
 		}
 		changeSong(currentSong.track);
-	}, [currentSong]);
+	}, [currentSong && currentSong.track]);
 
 	const changeSong = (songSrc) => {
 		if (soundPlayed) {
@@ -69,21 +80,24 @@ const LoggedInContainer = ({ children }) => {
 							<IconText
 								iconName={'material-symbols:home'}
 								displayText={'Home'}
-								active
+								active={curActiveScreen === 'home'}
 								targetLink={'/home'}
 							/>
 							<IconText
 								iconName={'material-symbols:search'}
 								displayText={'Search'}
+								active={curActiveScreen === 'search'}
 							/>
 							<IconText
 								iconName={'icomoon-free:books'}
 								displayText={'Library'}
+								active={curActiveScreen === 'library'}
 							/>
 							<IconText
 								iconName={'mingcute:music-fill'}
 								displayText={'My Podcasts'}
 								targetLink={'/mymusic'}
+								active={curActiveScreen === 'mymusic'}
 							/>
 						</div>
 						<div className='pt-5'>

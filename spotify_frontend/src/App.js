@@ -16,11 +16,21 @@ function App() {
 	// eslint-disable-next-line
 	const [cookie, setCookie] = useCookies(['token']);
 	const [currentSong, setCurrentSong] = useState(null);
+	const [soundPlayed, setSoundPlayed] = useState(null);
+	const [isPaused, setIsPaused] = useState(true);
 	return (
 		<div className='w-screen h-screen font-poppins'>
 			<BrowserRouter>
 				{cookie.token ? (
-					<songContext.Provider value={{ currentSong, setCurrentSong }}>
+					<songContext.Provider
+						value={{
+							currentSong,
+							setCurrentSong,
+							soundPlayed,
+							setSoundPlayed,
+							isPaused,
+							setIsPaused,
+						}}>
 						<Routes>
 							<Route
 								path='/'

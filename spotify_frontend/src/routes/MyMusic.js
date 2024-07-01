@@ -18,7 +18,7 @@ const MyMusic = () => {
 		getData();
 	});
 	return (
-		<LoggedInContainer>
+		<LoggedInContainer curActiveScreen='mymusic'>
 			<div className='text-white text-xl font-semibold pb-4 pl-3 pt-8'>
 				My Podcasts
 			</div>
