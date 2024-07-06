@@ -3,9 +3,19 @@
 import { Icon } from '@iconify/react';
 import LoggedInContainer from '../containers/LoggedInContainer';
 import { useState } from 'react';
+import { authGETReq } from '../utils/serverHelpers';
+import SingleSongCard from '../components/shared/SingleSongCard';
 
 const Search = () => {
 	const [isInputFocused, setIsInputFocused] = useState(false);
+	const [searchText, setSearchText] = useState('');
+	const [songData, setSongData] = useState([]);
+
+	const searchSong = async () => {
+		const response = await authGETReq('/podcast/get/podcastname/' + searchText);
+		setSongData(response.data);
+	};
+
 	return (
 		<LoggedInContainer curActiveScreen='search'>
 			<div className='w-full py-6'>
@@ -26,8 +36,34 @@ const Search = () => {
 						}}
 						onBlur={() => {
 							setIsInputFocused(false);
+						}}
+						value={searchText}
+						onChange={(e) => {
+							setSearchText(e.target.value);
+						}}
+						onKeyDown={(e) => {
+							if (e.key === 'Enter') {
+								searchSong();
+							}
 						}}></input>
 				</div>
+
+				{songData.length > 0 ? (
+					<div className='pt-10 space-y-3'>
+						<div className='text-white'>Search results for {searchText}</div>
+						{songData.map((item) => {
+							return (
+								<SingleSongCard
+									info={item}
+									key={JSON.stringify(item)}
+									playSound={() => {}}
+								/>
+							);
+						})}
+					</div>
+				) : (
+					<div className='text-white pt-10'> Nothing to show here </div>
+				)}
 			</div>
 		</LoggedInContainer>
 	);

@@ -8,7 +8,9 @@ import { useLayoutEffect, useRef, useState } from 'react';
 import { Howl, Howler } from 'howler';
 import songContext from '../contexts/songContext';
 import { useContext } from 'react';
+import CreatePlaylistModel from '../models/createPlaylistModel';
 const LoggedInContainer = ({ children, curActiveScreen }) => {
+	const [createPlaylistModelOpen, setCreatePlaylistModelOpen] = useState(false);
 	const {
 		currentSong,
 		setCurrentSong,
@@ -67,6 +69,13 @@ const LoggedInContainer = ({ children, curActiveScreen }) => {
 
 	return (
 		<div className='h-full w-full bg-app-black'>
+			{createPlaylistModelOpen && (
+				<CreatePlaylistModel
+					closeModel={() => {
+						setCreatePlaylistModelOpen(false);
+					}}
+				/>
+			)}
 			<div className={`${currentSong ? 'h-9/10' : 'h-full'} w-full flex`}>
 				<div className='h-full w-1/5 bg-black flex flex-col justify-between pb-10'>
 					<div>
@@ -105,6 +114,7 @@ const LoggedInContainer = ({ children, curActiveScreen }) => {
 							<IconText
 								iconName={'material-symbols:add-box'}
 								displayText={'Create Playlist'}
+								onClick={() => setCreatePlaylistModelOpen(true)}
 							/>
 							<IconText
 								iconName={'mdi:heart'}
