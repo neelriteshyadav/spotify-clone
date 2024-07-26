@@ -12,6 +12,8 @@ import MyMusic from './routes/MyMusic';
 import Search from './routes/Search';
 import { useCookies } from 'react-cookie';
 import songContext from './contexts/songContext';
+import Library from './routes/Library';
+import SinglePlaylistView from './routes/SinglePlaylistView';
 
 function App() {
 	// eslint-disable-next-line
@@ -52,6 +54,14 @@ function App() {
 							<Route
 								path='/search'
 								element={<Search />}
+							/>
+							<Route
+								path='/library'
+								element={<Library />}
+							/>
+							<Route
+								path='/playlist/:playlistId'
+								element={<SinglePlaylistView />}
 							/>
 							<Route
 								path='*'

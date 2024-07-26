@@ -52,6 +52,7 @@ const Search = () => {
 					<div className='pt-10 space-y-3'>
 						<div className='text-white'>Search results for {searchText}</div>
 						{songData.map((item) => {
+							console.log(item);
 							return (
 								<SingleSongCard
 									info={item}

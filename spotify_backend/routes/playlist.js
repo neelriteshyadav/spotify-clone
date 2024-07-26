@@ -37,18 +37,43 @@ router.get(
 	'/get/playlist/:playlistId',
 	passport.authenticate('jwt', { session: false }),
 	async (req, res) => {
-		try {
-			const playlistId = req.params.playlistId;
-			const playlist = await Playlist.findOne({ _name: playlistId });
-			if (!playlist) {
-				return res.status(301).json({ err: 'Invalid ID!' });
-			}
-			return res.json({ data: playlist });
-		} catch (error) {
-			return res.status(500).json({ error: 'Internal server error' }); // Handle internal server error
+		// This concept is called req.params
+		const playlistId = req.params.playlistId;
+		// I need to find a playlist with the _id = playlistId
+		const playlist = await Playlist.findOne({ _id: playlistId }).populate({
+			path: 'podcasts',
+			populate: {
+				path: 'artist',
+			},
+		});
+		if (!playlist) {
+			return res.status(301).json({ err: 'Invalid ID' });
 		}
+		return res.status(200).json(playlist);
 	},
 );
+// router.get(
+// 	'/get/playlist/:playlistId',
+// 	passport.authenticate('jwt', { session: false }),
+// 	async (req, res) => {
+// 		try {
+// 			const playlistId = req.params.playlistId;
+// 			console.log(playlistId);
+// 			const playlist = await Playlist.findOne({ _id: playlistId }).populate({
+// 				path: 'podcasts',
+// 				populate: {
+// 					path: 'artist',
+// 				},
+// 			});
+// 			if (!playlist) {
+// 				return res.status(301).json({ err: 'Invalid ID!???' });
+// 			}
+// 			return res.json({ data: playlist });
+// 		} catch (error) {
+// 			return res.status(500).json({ error: 'Internal server error' }); // Handle internal server error
+// 		}
+// 	},
+// );
 
 //Get all playlists published by me
 router.get(

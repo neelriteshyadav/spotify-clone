@@ -20,7 +20,7 @@ const MyMusic = () => {
 	return (
 		<LoggedInContainer curActiveScreen='mymusic'>
 			<div className='text-white text-xl font-semibold pb-4 pl-3 pt-8'>
-				My Podcasts
+				All experiences
 			</div>
 			<div className='space-y-3 overflow-auto'>
 				{songData.map((item) => {

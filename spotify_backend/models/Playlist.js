@@ -13,19 +13,19 @@ const Playlist = new mongoose.Schema({
 	},
 	owner: {
 		type: mongoose.Types.ObjectId,
-		ref: 'user',
+		ref: 'User',
 		required: true,
 	},
 	podcasts: [
 		{
 			type: mongoose.Types.ObjectId,
-			ref: 'podcast',
+			ref: 'Podcast',
 		},
 	],
 	collaborators: [
 		{
 			type: mongoose.Types.ObjectId,
-			ref: 'user',
+			ref: 'User',
 		},
 	],
 });

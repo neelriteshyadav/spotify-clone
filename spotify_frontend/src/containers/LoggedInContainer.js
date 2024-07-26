@@ -9,8 +9,13 @@ import { Howl, Howler } from 'howler';
 import songContext from '../contexts/songContext';
 import { useContext } from 'react';
 import CreatePlaylistModel from '../models/createPlaylistModel';
+import AddToPlaylistModel from '../models/addToPlaylistModel';
+import { authPOSTReq } from '../utils/serverHelpers';
+import { Link } from 'react-router-dom';
+
 const LoggedInContainer = ({ children, curActiveScreen }) => {
 	const [createPlaylistModelOpen, setCreatePlaylistModelOpen] = useState(false);
+	const [addToPlaylistModelOpen, setAddToPlaylistModelOpen] = useState(false);
 	const {
 		currentSong,
 		setCurrentSong,
@@ -46,6 +51,24 @@ const LoggedInContainer = ({ children, curActiveScreen }) => {
 		setIsPaused(false);
 	};
 
+	const addSongToPlaylist = async (playlistId) => {
+		const podcastId = currentSong._id;
+		const payload = { playlistId, podcastId };
+		console.log(payload);
+		try {
+			const response = await authPOSTReq('/playlist/add/song', payload);
+			console.log(response);
+
+			if (response && !response.error) {
+				setAddToPlaylistModelOpen(false);
+			} else {
+				console.error('Failed to add song to playlist:', response.error);
+			}
+		} catch (error) {
+			console.error('An error occurred while adding song to playlist:', error);
+		}
+	};
+
 	const playSound = () => {
 		if (!soundPlayed) {
 			return;
@@ -76,6 +99,14 @@ const LoggedInContainer = ({ children, curActiveScreen }) => {
 					}}
 				/>
 			)}
+			{addToPlaylistModelOpen && (
+				<AddToPlaylistModel
+					closeModel={() => {
+						setAddToPlaylistModelOpen(false);
+					}}
+					addSongToPlaylist={addSongToPlaylist}
+				/>
+			)}
 			<div className={`${currentSong ? 'h-9/10' : 'h-full'} w-full flex`}>
 				<div className='h-full w-1/5 bg-black flex flex-col justify-between pb-10'>
 					<div>
@@ -101,13 +132,22 @@ const LoggedInContainer = ({ children, curActiveScreen }) => {
 							<IconText
 								iconName={'icomoon-free:books'}
 								displayText={'Library'}
+								targetLink={'/library'}
 								active={curActiveScreen === 'library'}
 							/>
 							<IconText
 								iconName={'mingcute:music-fill'}
-								displayText={'My Podcasts'}
+								displayText={'All Experiences'}
 								targetLink={'/mymusic'}
 								active={curActiveScreen === 'mymusic'}
+							/>
+							<IconText
+								iconName={'mdi:resume'}
+								displayText={'Resume'}
+								targetLink={
+									'https://drive.google.com/file/d/1Y0I4h81LAEtSq7VPcWcB0PwlHzWoeSNB/view?usp=sharing'
+								}
+								target='_blank'
 							/>
 						</div>
 						<div className='pt-5'>
@@ -133,14 +173,15 @@ const LoggedInContainer = ({ children, curActiveScreen }) => {
 				<div className='h-full w-4/5 bg-app-black overflow-auto'>
 					<div className='navbar w-full h-1/10 bg-black bg-opacity-30 flex items-center justify-end'>
 						<div className='w-1/2 flex h-full'>
-							<div className='w-2/3 flex justify-around items-center'>
+							<div className='w-1/2 flex justify-around items-center'>
 								<TextWidthHover displayText={'Premium'} />
 								<TextWidthHover displayText={'Support'} />
-								<TextWidthHover displayText={'Download'} />
 								<div className='h-1/2 border-r border-white'></div>
 							</div>
-							<div className='w-1/3 flex justify-around h-full items-center'>
-								<TextWidthHover displayText={'Upload Podcast'} />
+							<div className='w-1/2 flex justify-around h-full items-center'>
+								<Link to={'/uploadsong'}>
+									<TextWidthHover displayText={'Upload Experience'} />
+								</Link>
 								<div className='bg-white h-10 w-10 flex items-center justify-center rounded-full font-semibold cursor-pointer'>
 									NY
 								</div>
@@ -202,7 +243,21 @@ const LoggedInContainer = ({ children, curActiveScreen }) => {
 						</div>
 					</div>
 
-					<div className='w-1/4 h-full flex justify-end'></div>
+					<div className='w-1/4 h-full flex justify-end items-center pr-4 space-x-3'>
+						<Icon
+							icon='tabler:playlist-x'
+							fontSize={30}
+							className='cursor-pointer text-gray-500 hover:text-white'
+							onClick={() => {
+								setAddToPlaylistModelOpen(true);
+							}}
+						/>
+						<Icon
+							icon='mdi:heart-outline'
+							fontSize={25}
+							className='cursor-pointer text-gray-500 hover:text-white'
+						/>
+					</div>
 				</div>
 			)}
 		</div>
