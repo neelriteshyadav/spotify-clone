@@ -13,14 +13,26 @@ const playlistRoutes = require('./routes/playlist');
 const app = express();
 const cors = require('cors');
 const PORT = 8000;
+const request = require('request');
 
-app.use(
-	cors({
-		origin: 'https://spotify-clone-frontend-six.vercel.app', // Allow this origin
-		methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods
-		credentials: true, // Enable if you need to send cookies or authentication headers
-	}),
-);
+app.use((req, res, next) => {
+	res.header('Access-Control-Allow-Origin', '*');
+	next();
+});
+
+// Define the CORS options
+const corsOptions = {
+	origin: '*', // Allow this origin
+	methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods
+	allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
+	credentials: true, // Enable if you need to send cookies or authentication headers
+};
+
+// Use the CORS middleware
+app.use(cors(corsOptions));
+
+app.options('*', cors(corsOptions));
+
 //app.use(cors());
 app.use(express.json());
 
