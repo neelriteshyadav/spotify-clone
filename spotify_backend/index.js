@@ -22,7 +22,7 @@ app.use((req, res, next) => {
 
 // Define the CORS options
 const corsOptions = {
-	origin: true, // Allow this origin
+	origin: ['https://spotify-clone-frontend-six.vercel.app'], // Allow this origin
 	methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods
 	allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
 	credentials: true, // Enable if you need to send cookies or authentication headers
@@ -79,7 +79,7 @@ passport.use(
 );
 
 app.get('/', (req, res) => {
-	res.send('Hello World!');
+	res.send('Hello World! This is my server');
 });
 
 app.use('/auth', authRoutes);
