@@ -8,6 +8,7 @@ export const unauthPOSTReq = async (route, body) => {
 			'Content-Type': 'application/json',
 		},
 		body: JSON.stringify(body),
+		credentials: 'include',
 	});
 	const formattedResponse = await response.json();
 	return formattedResponse;
@@ -22,6 +23,7 @@ export const authPOSTReq = async (route, body) => {
 			Authorization: `Bearer ${token}`,
 		},
 		body: JSON.stringify(body),
+		credentials: 'include',
 	});
 	const formattedResponse = await response.json();
 	return formattedResponse;
@@ -35,6 +37,7 @@ export const authGETReq = async (route) => {
 			'Content-Type': 'application/json',
 			Authorization: `Bearer ${token}`,
 		},
+		credentials: 'include',
 	});
 	const formattedResponse = await response.json();
 	return formattedResponse;

@@ -14,14 +14,14 @@ const app = express();
 const cors = require('cors');
 const PORT = 8000;
 
-// app.use(
-// 	cors({
-// 		origin: ['https://spotify-clone-sigma-bay.vercel.app/'],
-// 		methods: ['POST', 'GET'],
-// 		credentials: true,
-// 	}),
-// );
-app.use(cors());
+app.use(
+	cors({
+		origin: 'https://spotify-clone-frontend-six.vercel.app', // Allow this origin
+		methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods
+		credentials: true, // Enable if you need to send cookies or authentication headers
+	}),
+);
+//app.use(cors());
 app.use(express.json());
 
 //MongoDB connection
