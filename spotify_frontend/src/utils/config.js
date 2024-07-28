@@ -1,2 +1,4 @@
+/** @format */
 
-export const backendUrl = "http://localhost:8000";
+export const backendUrl =
+	'https://spotify-backend-6syxxuwym-neelriteshyadavs-projects.vercel.app';
