@@ -22,7 +22,7 @@ app.use((req, res, next) => {
 
 // Define the CORS options
 const corsOptions = {
-	origin: '*', // Allow this origin
+	origin: true, // Allow this origin
 	methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods
 	allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
 	credentials: true, // Enable if you need to send cookies or authentication headers
