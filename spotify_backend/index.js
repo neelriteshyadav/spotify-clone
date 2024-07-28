@@ -12,9 +12,15 @@ const podcastRoutes = require('./routes/podcast');
 const playlistRoutes = require('./routes/playlist');
 const app = express();
 const cors = require('cors');
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 
-app.use(cors());
+app.use(
+	cors({
+		origin: ['https://spotify-clone-sigma-bay.vercel.app/'],
+		methods: ['POST', 'GET'],
+		credentials: true,
+	}),
+);
 app.use(express.json());
 
 //MongoDB connection

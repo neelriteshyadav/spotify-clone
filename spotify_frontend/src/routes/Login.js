@@ -1,36 +1,37 @@
+/** @format */
+
 import { Icon } from '@iconify/react';
 import Textinput from '../components/shared/Textinput';
 import Passwordinput from '../components/shared/Passwordinput';
-import {Link, useNavigate} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { unauthPOSTReq } from '../utils/serverHelpers';
 import { useState } from 'react';
-import {useCookies} from 'react-cookie';
+import { useCookies } from 'react-cookie';
 
 const LoginComponent = () => {
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
 	// eslint-disable-next-line
-	const [cookie, setCookie] = useCookies(["token"]);
+	const [cookie, setCookie] = useCookies(['token']);
 	const navigate = useNavigate();
 
 	const login = async () => {
-		const data = {email, password};
-		const response = await unauthPOSTReq(
-			"/auth/login", data
-		);
-		if(response && !response.err) {
+		const data = { email, password };
+		const response = await unauthPOSTReq('/auth/login', data);
+		if (response && !response.err) {
+			//console.log(response);
 			const token = response.token;
+			//console.log(token);
 			const date = new Date();
 			date.setDate(date.getDate() + 30);
-			setCookie("token", token, {
-			path: '/',
-			expires: date
-		});
-			alert("Success");
-			navigate("/home");
-		}
-		else{
-			alert("Failure");
+			setCookie('token', token, {
+				path: '/',
+				expires: date,
+			});
+			alert('Success');
+			navigate('/home');
+		} else {
+			alert('Failure');
 		}
 	};
 
@@ -55,23 +56,22 @@ const LoginComponent = () => {
 					label='Password'
 					placeholder='Password'
 					value={password}
-                    setValue={setPassword}
+					setValue={setPassword}
 				/>
 				<div className='w-full flex justify-end items-center my-8'>
-					<button className='bg-green-400 font-semibold p-3 px-10 rounded-full'
-					onClick={(e) => {
-						e.preventDefault();
-						login();
-					}}>
+					<button
+						className='bg-green-400 font-semibold p-3 px-10 rounded-full'
+						onClick={(e) => {
+							e.preventDefault();
+							login();
+						}}>
 						LOG IN
 					</button>
 				</div>
 				<div className='border border-solid border-gray-300 w-full'></div>
 				<div className='my-6 font-semibold text-lg'>Don't have an account?</div>
 				<div className='w-full py-4 text-gray-500 font-bold rounded-full border border-gray-500 flex justify-center items-center'>
-					<Link to="/signup">
-					SIGN UP FOR SPOTIFY
-					</Link>
+					<Link to='/signup'>SIGN UP FOR SPOTIFY</Link>
 				</div>
 			</div>
 		</div>
