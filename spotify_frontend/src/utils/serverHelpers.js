@@ -3,7 +3,6 @@ import { backendUrl } from './config';
 
 export const unauthPOSTReq = async (route, body) => {
 	const response = await fetch(backendUrl + route, {
-		mode: 'no-cors',
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
@@ -18,7 +17,6 @@ export const unauthPOSTReq = async (route, body) => {
 export const authPOSTReq = async (route, body) => {
 	const token = getToken();
 	const response = await fetch(backendUrl + route, {
-		mode: 'no-cors',
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
@@ -34,7 +32,6 @@ export const authPOSTReq = async (route, body) => {
 export const authGETReq = async (route) => {
 	const token = getToken();
 	const response = await fetch(backendUrl + route, {
-		mode: 'no-cors',
 		method: 'GET',
 		headers: {
 			'Content-Type': 'application/json',
