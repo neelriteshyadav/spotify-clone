@@ -9,7 +9,7 @@
 		"@testing-library/jest-dom": "^5.17.0",
 		"@testing-library/react": "^13.4.0",
 		"@testing-library/user-event": "^13.5.0",
-		"cloudinary-core": "^1.21.0",
+		"cloudinary-core": "^2.13.0",
 		"cloudinary-react": "^1.8.1",
 		"howler": "^2.2.4",
 		"postcss": "^8.4.36",
