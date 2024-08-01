@@ -10,15 +10,9 @@ const User = require('./models/User');
 const authRoutes = require('./routes/auth');
 const podcastRoutes = require('./routes/podcast');
 const playlistRoutes = require('./routes/playlist');
-const app = express();
 const cors = require('cors');
 const PORT = 8000;
-const request = require('request');
-
-app.use((req, res, next) => {
-	res.header('Access-Control-Allow-Origin', '*');
-	next();
-});
+const app = express();
 
 // Define the CORS options
 const corsOptions = {
@@ -28,15 +22,33 @@ const corsOptions = {
 	credentials: true, // Enable if you need to send cookies or authentication headers
 };
 
-// Use the CORS middleware
+// Use the CORS middleware for general CORS handling
 app.use(cors(corsOptions));
 
-app.options('*', cors(corsOptions));
+// Utility to wrap handlers for CORS
+const allowCors = (fn) => async (req, res) => {
+	res.setHeader('Access-Control-Allow-Credentials', true);
+	res.setHeader('Access-Control-Allow-Origin', '*');
+	// another common pattern
+	// res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+	res.setHeader(
+		'Access-Control-Allow-Methods',
+		'GET,OPTIONS,PATCH,DELETE,POST,PUT',
+	);
+	res.setHeader(
+		'Access-Control-Allow-Headers',
+		'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version',
+	);
+	if (req.method === 'OPTIONS') {
+		res.status(200).end();
+		return;
+	}
+	return await fn(req, res);
+};
 
-//app.use(cors());
 app.use(express.json());
 
-//MongoDB connection
+// MongoDB connection
 mongoose
 	.connect(
 		'mongodb+srv://admin:' +
@@ -47,44 +59,48 @@ mongoose
 			useUnifiedTopology: true,
 		},
 	)
-	.then((x) => {
+	.then(() => {
 		console.log('Connected to MongoDB!');
 	})
 	.catch((err) => {
-		console.log('Error while connecting to MongoDB!');
+		console.log('Error while connecting to MongoDB!', err);
 	});
 
-//Passport JWT
+// Passport JWT
 let opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = process.env.PASSPORT_JWT;
 passport.use(
 	new JwtStrategy(opts, function (jwt_payload, done) {
-		try {
-			User.findOne({ _id: jwt_payload.identifier }, function (err, user) {
-				if (err) {
-					return done(err, false);
-				}
-				if (user) {
-					return done(null, user);
-				} else {
-					return done(null, false);
-					// or you could create a new account
-				}
-			});
-		} catch (error) {
-			console.log(error);
-		}
+		User.findOne({ _id: jwt_payload.identifier }, function (err, user) {
+			if (err) {
+				return done(err, false);
+			}
+			if (user) {
+				return done(null, user);
+			} else {
+				return done(null, false);
+			}
+		});
 	}),
 );
 
-app.get('/', (req, res) => {
-	res.send('Hello World! This is my server');
-});
+// Wrap routes with allowCors
 
-app.use('/auth', authRoutes);
-app.use('/podcast', podcastRoutes);
-app.use('/playlist', playlistRoutes);
+app.get(
+	'/',
+	allowCors((req, res) => {
+		res.send('Hello World! This is my server');
+	}),
+);
+
+app.use('/auth', (req, res, next) => allowCors(authRoutes)(req, res, next));
+app.use('/podcast', (req, res, next) =>
+	allowCors(podcastRoutes)(req, res, next),
+);
+app.use('/playlist', (req, res, next) =>
+	allowCors(playlistRoutes)(req, res, next),
+);
 
 app.listen(PORT, () => {
 	console.log(`Server is running on ${PORT}`);
