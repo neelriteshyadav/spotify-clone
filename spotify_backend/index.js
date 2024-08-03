@@ -14,17 +14,18 @@ const cors = require('cors');
 const PORT = 8000;
 const app = express();
 
-// Define the CORS options
-const corsOptions = {
-	origin: ['https://spotify-clone-frontend-six.vercel.app'], // Allow this origin
-	methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods
-	allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
-	credentials: true, // Enable if you need to send cookies or authentication headers
-};
+// // Define the CORS options
+// const corsOptions = {
+// 	origin: '*', // Allow this origin
+// 	methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods
+// 	allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
+// 	credentials: true, // Enable if you need to send cookies or authentication headers
+// };
 
-// Use the CORS middleware for general CORS handling
-app.use(cors(corsOptions));
+// // Use the CORS middleware for general CORS handling
+// app.use(cors(corsOptions));
 
+app.use(cors());
 // Utility to wrap handlers for CORS
 const allowCors = (fn) => async (req, res) => {
 	res.setHeader('Access-Control-Allow-Credentials', true);
