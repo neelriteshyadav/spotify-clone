@@ -1,0 +1,16 @@
+{
+	"name": "spotify-resume",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"install-server": "cd spotify_backend && npm install",
+		"start-server": "cd spotify_backend && node index.js",
+		"install-client": "cd spotify_frontend && npm install",
+		"build-client": "cd spotify_frontend && npm run build",
+		"start-client": "cd spotify_frontend && npm run start"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC"
+}
