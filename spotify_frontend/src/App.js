@@ -14,8 +14,10 @@ import { useCookies } from 'react-cookie';
 import songContext from './contexts/songContext';
 import Library from './routes/Library';
 import SinglePlaylistView from './routes/SinglePlaylistView';
+import ReactGA from 'react-ga4';
 
 function App() {
+	ReactGA.initialize('G-KLE94BFMZ9');
 	// eslint-disable-next-line
 	const [cookie, setCookie] = useCookies(['token']);
 	const [currentSong, setCurrentSong] = useState(null);

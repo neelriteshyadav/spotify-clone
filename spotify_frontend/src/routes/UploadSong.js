@@ -10,8 +10,14 @@ import { useState } from 'react';
 import { authPOSTReq } from '../utils/serverHelpers';
 import { useNavigate } from 'react-router-dom';
 import LoggedInContainer from '../containers/LoggedInContainer';
+import ReactGA from 'react-ga4';
 
 const UploadSong = () => {
+	ReactGA.send({
+		hitType: 'pageview',
+		page: '/uploadSong',
+		title: 'uploadSong',
+	});
 	const [name, setName] = useState('');
 	const [thumbnail, setThumbnail] = useState('');
 	const [podcastUrl, setPodcastUrl] = useState('');

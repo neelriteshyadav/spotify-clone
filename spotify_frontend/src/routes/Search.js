@@ -5,8 +5,14 @@ import LoggedInContainer from '../containers/LoggedInContainer';
 import { useState } from 'react';
 import { authGETReq } from '../utils/serverHelpers';
 import SingleSongCard from '../components/shared/SingleSongCard';
+import ReactGA from 'react-ga4';
 
 const Search = () => {
+	ReactGA.send({
+		hitType: 'pageview',
+		page: '/search',
+		title: 'search',
+	});
 	const [isInputFocused, setIsInputFocused] = useState(false);
 	const [searchText, setSearchText] = useState('');
 	const [songData, setSongData] = useState([]);

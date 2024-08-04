@@ -1,6 +1,7 @@
 /** @format */
 
 import { useEffect, useState } from 'react';
+
 import { useParams } from 'react-router-dom';
 import LoggedInContainer from '../containers/LoggedInContainer';
 import {
@@ -8,8 +9,14 @@ import {
 	makeAuthenticatedGETRequest,
 } from '../utils/serverHelpers';
 import SingleSongCard from '../components/shared/SingleSongCard';
+import ReactGA from 'react-ga4';
 
 const SinglePlaylistView = () => {
+	ReactGA.send({
+		hitType: 'pageview',
+		page: '/playlist/:playlistId',
+		title: 'Single Playlist',
+	});
 	const [playlistDetails, setPlaylistDetails] = useState({});
 	const { playlistId } = useParams();
 

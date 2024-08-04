@@ -8,8 +8,14 @@ import {
 	makeAuthenticatedGETRequest,
 } from '../utils/serverHelpers';
 import SingleSongCard from '../components/shared/SingleSongCard';
+import ReactGA from 'react-ga4';
 
 const HomeComponent = () => {
+	ReactGA.send({
+		hitType: 'pageview',
+		page: '/home',
+		title: 'Home',
+	});
 	const [projectDetails, setprojectDetails] = useState({});
 	useEffect(() => {
 		const getData = async () => {

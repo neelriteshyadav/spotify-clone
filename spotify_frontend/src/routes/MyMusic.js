@@ -6,8 +6,14 @@ import SingleSongCard from '../components/shared/SingleSongCard';
 import { authGETReq } from '../utils/serverHelpers';
 import { Howl, Howler } from 'howler';
 import LoggedInContainer from '../containers/LoggedInContainer';
+import ReactGA from 'react-ga4';
 
 const MyMusic = () => {
+	ReactGA.send({
+		hitType: 'pageview',
+		page: '/myMusic',
+		title: 'myMusic',
+	});
 	const [songData, setSongData] = useState([]);
 
 	useEffect(() => {

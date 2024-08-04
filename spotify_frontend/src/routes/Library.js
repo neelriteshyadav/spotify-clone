@@ -4,8 +4,14 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoggedInContainer from '../containers/LoggedInContainer';
 import { authGETReq } from '../utils/serverHelpers';
+import ReactGA from 'react-ga4';
 
 const Library = () => {
+	ReactGA.send({
+		hitType: 'pageview',
+		page: '/library',
+		title: 'library',
+	});
 	const [myPlaylists, setMyPlaylists] = useState([]);
 
 	useEffect(() => {
