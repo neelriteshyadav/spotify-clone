@@ -1,2 +1,3 @@
+/** @format */
 
-export const backendUrl = "http://localhost:8000";
+export const backendUrl = 'https://spotify-backend-8hkq.onrender.com';
